@@ -26,9 +26,11 @@ def create_app(config_name='development'):
     # Load configuration according to environment
     config_manager = ConfigManager(app)
     config_manager.load_config(config_name=config_name)
-
     # Initialize SQLAlchemy and Migrate with the app
+
     db.init_app(app, uri=os.getenv('DATABASE_URI'))
+    db.init_app(app, uri=os.getenv('DB_CONNECTION_STRING'))
+    
     migrate.init_app(app, db)
 
     # Register modules
@@ -53,6 +55,8 @@ def create_app(config_name='development'):
     # Initialize error handler manager
     error_handler_manager = ErrorHandlerManager(app)
     error_handler_manager.register_error_handlers()
+
+
 
     # Injecting environment variables into jinja context
     @app.context_processor
